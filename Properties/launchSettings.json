@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AfterlifeWinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "AfterlifeWinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

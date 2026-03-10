@@ -1,0 +1,352 @@
+﻿<Application
+    x:Class="AfterlifeWinUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AfterlifeWinUI">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Converters -->
+            <local:BoolToChevronGlyphConverter x:Key="BoolToChevronGlyph"/>
+            <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
+
+            <!-- ==================== DARK MODE COLORS ==================== -->
+            
+            <!-- Base Colors -->
+            <Color x:Key="BackgroundColor">#08080c</Color>
+            <Color x:Key="BackgroundDarkColor">#050508</Color>
+            <Color x:Key="SurfaceColor">#12121a</Color>
+            <Color x:Key="SurfaceLightColor">#1a1a24</Color>
+            <Color x:Key="CardColor">#18182280</Color>
+
+            <!-- Glass Colors - Dark mode (low alpha for dark bg) -->
+            <Color x:Key="GlassFillColor">#2018182a</Color>
+            <Color x:Key="GlassBorderColor">#35ffffff</Color>
+            <Color x:Key="GlassHighlightColor">#18ffffff</Color>
+            <Color x:Key="GlassWhiteTintColor">#0Cffffff</Color>
+            <Color x:Key="GlassReflectionColor">#06ffffff</Color>
+            <Color x:Key="GlassEdgeGlowColor">#2000f3ff</Color>
+            
+            <!-- Light Mode Colors -->
+            <Color x:Key="LightBackgroundColor">#F3F3F3</Color>
+            <Color x:Key="LightSurfaceColor">#FFFFFF</Color>
+            <Color x:Key="LightGlassFillColor">#F2FFFFFF</Color>
+            <Color x:Key="LightGlassBorderColor">#32000000</Color>
+            <Color x:Key="LightTextPrimaryColor">#1E1E23</Color>
+            <Color x:Key="LightTextSecondaryColor">#50505A</Color>
+            <Color x:Key="LightTextTertiaryColor">#64646E</Color>
+
+            <!-- Accent Colors -->
+            <Color x:Key="AccentCyanColor">#00f3ff</Color>
+            <Color x:Key="AccentPurpleColor">#b026ff</Color>
+            <Color x:Key="AccentGreenColor">#00ff9d</Color>
+            <Color x:Key="AccentRedColor">#ff2a6d</Color>
+            <Color x:Key="AccentOrangeColor">#ffaa00</Color>
+
+            <!-- Text Colors -->
+            <Color x:Key="TextPrimaryColor">#ffffff</Color>
+            <Color x:Key="TextSecondaryColor">#888899</Color>
+            <Color x:Key="TextTertiaryColor">#555566</Color>
+
+            <!-- Solid Color Brushes -->
+            <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+            <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+            <SolidColorBrush x:Key="GlassFillBrush" Color="{StaticResource GlassFillColor}"/>
+            <SolidColorBrush x:Key="GlassBorderBrush" Color="{StaticResource GlassBorderColor}"/>
+            <SolidColorBrush x:Key="GlassHighlightBrush" Color="{StaticResource GlassHighlightColor}"/>
+            <SolidColorBrush x:Key="GlassWhiteTintBrush" Color="{StaticResource GlassWhiteTintColor}"/>
+            <SolidColorBrush x:Key="CyanBrush" Color="{StaticResource AccentCyanColor}"/>
+            <SolidColorBrush x:Key="PurpleBrush" Color="{StaticResource AccentPurpleColor}"/>
+            <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource AccentGreenColor}"/>
+            <SolidColorBrush x:Key="RedBrush" Color="{StaticResource AccentRedColor}"/>
+            <SolidColorBrush x:Key="OrangeBrush" Color="{StaticResource AccentOrangeColor}"/>
+            <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}"/>
+            <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
+            <SolidColorBrush x:Key="TextTertiaryBrush" Color="{StaticResource TextTertiaryColor}"/>
+
+            <!-- ==================== LIGHT MODE GLASS PANEL STYLE ==================== -->
+            <Style x:Key="LightGlassPanel" TargetType="Border">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="16"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#F5FFFFFF" Offset="0"/>
+                            <GradientStop Color="#EEFAFAFC" Offset="0.3"/>
+                            <GradientStop Color="#F0F5F5F8" Offset="0.7"/>
+                            <GradientStop Color="#F8FCFCFF" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#38000000" Offset="0"/>
+                            <GradientStop Color="#18000000" Offset="0.5"/>
+                            <GradientStop Color="#28000000" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ==================== GLASS PANEL STYLE ==================== -->
+            <Style x:Key="GlassPanel" TargetType="Border">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="16"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#30ffffff" Offset="0"/>
+                            <GradientStop Color="#18ffffff" Offset="0.5"/>
+                            <GradientStop Color="#25ffffff" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <!-- ==================== WINDOW CONTROL BUTTONS ==================== -->
+            
+            <Style x:Key="WindowControlButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Width" Value="36"/>
+                <Setter Property="Height" Value="28"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}">
+                                <ContentPresenter 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"/>
+                                
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonBorder" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <SolidColorBrush Color="#25ffffff"/>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonBorder" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <SolidColorBrush Color="#35ffffff"/>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="WindowControlButtonClose" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Width" Value="36"/>
+                <Setter Property="Height" Value="28"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}">
+                                <ContentPresenter x:Name="ContentPresenter"
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"/>
+                                
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonBorder" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <SolidColorBrush Color="#e81123"/>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonBorder" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <SolidColorBrush Color="#c41020"/>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ==================== OTHER BUTTON STYLES ==================== -->
+            
+            <Style x:Key="CyberButton" TargetType="Button">
+                <Setter Property="Background" Value="#15ffffff"/>
+                <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <Setter Property="BorderBrush" Value="#30ffffff"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="16,10"/>
+                <Setter Property="CornerRadius" Value="8"/>
+            </Style>
+
+            <Style x:Key="DangerButton" TargetType="Button">
+                <Setter Property="Background" Value="#20ff2a6d"/>
+                <Setter Property="Foreground" Value="{StaticResource RedBrush}"/>
+                <Setter Property="BorderBrush" Value="#40ff2a6d"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="16,10"/>
+                <Setter Property="CornerRadius" Value="8"/>
+            </Style>
+
+            <Style x:Key="GlassButton" TargetType="Button">
+                <Setter Property="Background" Value="#15ffffff"/>
+                <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <Setter Property="BorderBrush" Value="#25ffffff"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="14,8"/>
+                <Setter Property="CornerRadius" Value="8"/>
+            </Style>
+
+            <Style x:Key="IconButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="8"/>
+                <Setter Property="MinWidth" Value="40"/>
+                <Setter Property="MinHeight" Value="40"/>
+                <Setter Property="CornerRadius" Value="8"/>
+            </Style>
+
+            <Style x:Key="NavButtonRect" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="16,12"/>
+                <Setter Property="Margin" Value="0,2"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Border x:Name="BackgroundBorder"
+                                        Background="{TemplateBinding Background}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"/>
+                                <Border x:Name="AccentBar"
+                                        Width="3"
+                                        HorizontalAlignment="Left"
+                                        CornerRadius="0,2,2,0"
+                                        Background="Transparent"/>
+                                <ContentPresenter 
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Padding="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="Center"/>
+                                
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundBorder" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource GlassHighlightBrush}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundBorder" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource GlassWhiteTintBrush}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ==================== TEXT STYLES ==================== -->
+            
+            <Style x:Key="TitleText" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="{StaticResource CyanBrush}"/>
+            </Style>
+
+            <Style x:Key="SubtitleText" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            </Style>
+
+            <Style x:Key="SectionTitle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            </Style>
+
+            <Style x:Key="StatNumber" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="32"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+
+            <Style x:Key="StatLabel" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            </Style>
+
+            <Style x:Key="GlassTextBox" TargetType="TextBox">
+                <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+                <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+                <Setter Property="PlaceholderForeground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource CyanBrush}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="12,10"/>
+                <Setter Property="CornerRadius" Value="8"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+        <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+        <OutputType>WinExe</OutputType>
+
+        <!-- WinUI 3 -->
+        <UseWinUI>true</UseWinUI>
+        <EnableMsixTooling>true</EnableMsixTooling>
+        <WindowsPackageType>None</WindowsPackageType>
+
+        <!-- Project Options -->
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>AfterlifeWinUI</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+        <!-- App Options - x64 first in list makes it default in VS -->
+        <UseRidGraph>true</UseRidGraph>
+        <Platforms>x64;x86;ARM64</Platforms>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <PublishProfile>win-$(Platform).pubxml</PublishProfile>
+        <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &gt;= 8">win-x64;win-x86;win-arm64</RuntimeIdentifiers>
+        <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x64;win10-x86;win10-arm64</RuntimeIdentifiers>
+        
+        <!-- Resources folder path - use project directory parent for solution root -->
+        <ResourcesSourcePath>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\resources'))</ResourcesSourcePath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="Assets\SplashScreen.scale-200.png" />
+        <Content Include="Assets\LockScreenLogo.scale-200.png" />
+        <Content Include="Assets\Square150x150Logo.scale-200.png" />
+        <Content Include="Assets\Square44x44Logo.scale-200.png" />
+        <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+        <Content Include="Assets\StoreLogo.png" />
+        <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+        <Content Include="Assets\icon.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <!-- Native YARA library - copy to output directory -->
+    <ItemGroup>
+        <None Include="libyara64.dll" Condition="Exists('libyara64.dll')">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="AfterlifeWinUI.slnx" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="dnYara" Version="2.1.0" />
+        <PackageReference Include="dnYara.Interop" Version="2.1.0" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.*" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.*" />
+        <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.*" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+        <PackageReference Include="Serilog" Version="4.*" />
+        <PackageReference Include="Serilog.Sinks.File" Version="6.*" />
+        
+        <!-- LMDB for signature database -->
+        <PackageReference Include="LightningDB" Version="0.16.0" />
+        
+        <!-- For loading PNG icons -->
+        <PackageReference Include="System.Drawing.Common" Version="8.*" />
+        
+        <!-- ONNX Runtime for AI detection -->
+        <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.*" />
+
+        <Manifest Include="$(ApplicationManifest)" />
+    </ItemGroup>
+
+    <!-- MSIX ProjectCapability -->
+    <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+        <ProjectCapability Include="Msix" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+        <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+    </PropertyGroup>
+
+    <!-- 
+        Copy detection resources (LMDB database and YARA rules) to output directory
+        Resources are copied to $(OutDir)resources\ folder
+    -->
+    <Target Name="CopyDetectionResources" AfterTargets="Build">
+        <PropertyGroup>
+            <ResourcesOutputPath>$(OutDir)resources\</ResourcesOutputPath>
+            <AIModelsSourcePath>$(MSBuildProjectDirectory)\resources\ai_models</AIModelsSourcePath>
+        </PropertyGroup>
+        
+        <Message Importance="high" Text="[AfterlifeWinUI] Copying detection resources..." />
+        <Message Importance="high" Text="  Source: $(ResourcesSourcePath)" />
+        <Message Importance="high" Text="  Destination: $(ResourcesOutputPath)" />
+        
+        <!-- Create resources directory in output -->
+        <MakeDir Directories="$(ResourcesOutputPath)" Condition="!Exists('$(ResourcesOutputPath)')" />
+        <MakeDir Directories="$(ResourcesOutputPath)malware.lmdb" Condition="!Exists('$(ResourcesOutputPath)malware.lmdb')" />
+        <MakeDir Directories="$(ResourcesOutputPath)ai_models" Condition="!Exists('$(ResourcesOutputPath)ai_models')" />
+        
+        <!-- Copy YARA rules file -->
+        <Copy SourceFiles="$(ResourcesSourcePath)\yara_rules.yar" DestinationFiles="$(ResourcesOutputPath)yara_rules.yar" Condition="Exists('$(ResourcesSourcePath)\yara_rules.yar')" SkipUnchangedFiles="true">
+            <Output TaskParameter="CopiedFiles" ItemName="CopiedYaraRules" />
+        </Copy>
+        <Message Importance="high" Text="  Copied YARA rules: @(CopiedYaraRules-&gt;Count()) file(s)" Condition="'@(CopiedYaraRules)' != ''" />
+        
+        <!-- Copy LMDB database files -->
+        <Copy SourceFiles="$(ResourcesSourcePath)\malware.lmdb\data.mdb" DestinationFiles="$(ResourcesOutputPath)malware.lmdb\data.mdb" Condition="Exists('$(ResourcesSourcePath)\malware.lmdb\data.mdb')" SkipUnchangedFiles="true">
+            <Output TaskParameter="CopiedFiles" ItemName="CopiedLmdbData" />
+        </Copy>
+        <Copy SourceFiles="$(ResourcesSourcePath)\malware.lmdb\lock.mdb" DestinationFiles="$(ResourcesOutputPath)malware.lmdb\lock.mdb" Condition="Exists('$(ResourcesSourcePath)\malware.lmdb\lock.mdb')" SkipUnchangedFiles="true">
+            <Output TaskParameter="CopiedFiles" ItemName="CopiedLmdbLock" />
+        </Copy>
+        <Message Importance="high" Text="  Copied LMDB database files" Condition="'@(CopiedLmdbData)' != ''" />
+        
+        <!-- Copy AI ONNX models -->
+        <ItemGroup>
+            <AIModelFiles Include="$(AIModelsSourcePath)\*.onnx" Condition="Exists('$(AIModelsSourcePath)')" />
+        </ItemGroup>
+        <Copy SourceFiles="@(AIModelFiles)" DestinationFolder="$(ResourcesOutputPath)ai_models" SkipUnchangedFiles="true" Condition="'@(AIModelFiles)' != ''">
+            <Output TaskParameter="CopiedFiles" ItemName="CopiedAIModels" />
+        </Copy>
+        <Message Importance="high" Text="  Copied AI models: @(CopiedAIModels-&gt;Count()) file(s)" Condition="'@(CopiedAIModels)' != ''" />
+        
+        <Message Importance="high" Text="[AfterlifeWinUI] Detection resources ready" />
+    </Target>
+</Project>

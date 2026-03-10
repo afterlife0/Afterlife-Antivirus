@@ -1,0 +1,357 @@
+<Page
+    x:Class="AfterlifeWinUI.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AfterlifeWinUI.Views"
+    Background="Transparent"
+    AllowDrop="True"
+    DragOver="Page_DragOver"
+    DragLeave="Page_DragLeave"
+    Drop="Page_Drop"
+    Loaded="Page_Loaded"
+    Unloaded="Page_Unloaded">
+
+    <Page.Resources>
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource GlassBorderBrush}"/>
+        </Style>
+        
+        <Style x:Key="FrostedGlassPanel" TargetType="Border">
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource GlassBorderBrush}"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <!-- Main Content -->
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Padding="0,0,0,0">
+            <StackPanel Spacing="20">
+
+                <!-- PAGE HEADER - Animated Element 0 -->
+                <StackPanel x:Name="AnimHeader" Margin="0,16,0,0">
+                    <TextBlock x:Name="PageTitle" Style="{StaticResource TitleText}" Text="Protection Dashboard"/>
+                    <TextBlock x:Name="PageSubtitle" Style="{StaticResource SubtitleText}" Text="Real-time threat monitoring and scanning" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- QUICK SCAN PANEL - Animated Element 1 -->
+                <Border x:Name="AnimQuickScan" Style="{StaticResource GlassPanel}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#1815151f" Offset="0"/>
+                            <GradientStop Color="#0Cffffff" Offset="0.3"/>
+                            <GradientStop Color="#1812121a" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE9D9;" FontSize="20" Foreground="{StaticResource CyanBrush}"/>
+                            <TextBlock x:Name="QuickScanTitle" Style="{StaticResource SectionTitle}" Text="Quick Scan"/>
+                        </StackPanel>
+
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="ScanPathBox" Grid.Column="0" 
+                                     PlaceholderText="Enter file or folder path to scan..."
+                                     Style="{StaticResource GlassTextBox}"/>
+                            
+                            <Button x:Name="BrowseFileButton" Grid.Column="1" Content="File" 
+                                    Style="{StaticResource CyberButton}"
+                                    ToolTipService.ToolTip="Browse for a single file"
+                                    Click="BrowseFileButton_Click"/>
+                            
+                            <Button x:Name="BrowseButton" Grid.Column="2" Content="Folder" 
+                                    Style="{StaticResource CyberButton}"
+                                    ToolTipService.ToolTip="Browse for a folder"
+                                    Click="BrowseButton_Click"/>
+                            
+                            <Button x:Name="ScanButton" Grid.Column="3" Content="Start Scan" 
+                                    Style="{StaticResource CyberButton}"
+                                    Click="ScanButton_Click"/>
+                        </Grid>
+
+                        <TextBlock x:Name="TipText" Text="💡 Tip: Drag and drop files or folders anywhere on this page to scan them"
+                                   Foreground="{StaticResource TextTertiaryBrush}" FontSize="11" FontStyle="Italic"
+                                   HorizontalAlignment="Center"/>
+
+                        <StackPanel x:Name="ProgressPanel" Visibility="Collapsed" Spacing="8">
+                            <ProgressBar x:Name="ScanProgress" Value="0" Maximum="100" Height="6"
+                                         Background="#20ffffff" Foreground="{StaticResource CyanBrush}"/>
+                            <Grid>
+                                <TextBlock x:Name="ScanStatusText" Text="Scanning..." 
+                                           Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock x:Name="ScanProgressText" Text="0%" 
+                                           HorizontalAlignment="Right"
+                                           Foreground="{StaticResource CyanBrush}" FontWeight="SemiBold" FontSize="12"/>
+                            </Grid>
+                            <TextBlock x:Name="CurrentFileText" 
+                                       Foreground="{StaticResource TextTertiaryBrush}" FontSize="11"
+                                       TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- STATS CARDS ROW - Animated Elements 2-6 -->
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Files Scanned Card -->
+                    <Border x:Name="AnimStatCard1" Grid.Column="0" Style="{StaticResource StatCard}">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1815151f" Offset="0"/>
+                                <GradientStop Color="#08ffffff" Offset="0.3"/>
+                                <GradientStop Color="#1812121a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock x:Name="FilesScannedLabel" Style="{StaticResource StatLabel}" Text="Files Scanned"/>
+                            <TextBlock x:Name="FilesScannedText" Style="{StaticResource StatNumber}" 
+                                       Text="0" Foreground="{StaticResource CyanBrush}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Threats Blocked Card -->
+                    <Border x:Name="AnimStatCard2" Grid.Column="1" Style="{StaticResource StatCard}">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1815151f" Offset="0"/>
+                                <GradientStop Color="#08ffffff" Offset="0.3"/>
+                                <GradientStop Color="#1812121a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock x:Name="ThreatsBlockedLabel" Style="{StaticResource StatLabel}" Text="Threats / Suspicious"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock x:Name="ThreatsBlockedText" Style="{StaticResource StatNumber}" 
+                                           Text="0" Foreground="{StaticResource RedBrush}"/>
+                                <TextBlock Style="{StaticResource StatNumber}" 
+                                           Text="/" Foreground="{StaticResource TextTertiaryBrush}" Opacity="0.5"/>
+                                <TextBlock x:Name="SuspiciousBlockedText" Style="{StaticResource StatNumber}" 
+                                           Text="0" Foreground="#ff8800"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Signatures Card -->
+                    <Border x:Name="AnimStatCard3" Grid.Column="2" Style="{StaticResource StatCard}">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1815151f" Offset="0"/>
+                                <GradientStop Color="#08ffffff" Offset="0.3"/>
+                                <GradientStop Color="#1812121a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock x:Name="SignaturesLabel" Style="{StaticResource StatLabel}" Text="Signatures"/>
+                            <TextBlock x:Name="SignaturesText" Style="{StaticResource StatNumber}" 
+                                       Text="0" Foreground="{StaticResource PurpleBrush}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- YARA Rules Card -->
+                    <Border x:Name="AnimStatCard4" Grid.Column="3" Style="{StaticResource StatCard}">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1815151f" Offset="0"/>
+                                <GradientStop Color="#08ffffff" Offset="0.3"/>
+                                <GradientStop Color="#1812121a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock x:Name="YaraRulesLabel" Style="{StaticResource StatLabel}" Text="YARA Rules"/>
+                            <TextBlock x:Name="YaraRulesText" Style="{StaticResource StatNumber}" 
+                                       Text="0" Foreground="{StaticResource GreenBrush}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- AI Models Card -->
+                    <Border x:Name="AnimStatCard5" Grid.Column="4" Style="{StaticResource StatCard}">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1815151f" Offset="0"/>
+                                <GradientStop Color="#08ffffff" Offset="0.3"/>
+                                <GradientStop Color="#1812121a" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock x:Name="AIModelsLabel" Style="{StaticResource StatLabel}" Text="AI Models"/>
+                            <TextBlock x:Name="AIModelsText" Style="{StaticResource StatNumber}" 
+                                       Text="0" Foreground="{StaticResource OrangeBrush}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- MONITORED DIRECTORIES - Animated Element 6 -->
+                <Border x:Name="AnimMonitored" Style="{StaticResource GlassPanel}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#1815151f" Offset="0"/>
+                            <GradientStop Color="#08ffffff" Offset="0.3"/>
+                            <GradientStop Color="#1812121a" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <StackPanel Spacing="12">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <FontIcon Glyph="&#xE8B7;" FontSize="18" Foreground="{StaticResource PurpleBrush}"/>
+                                <TextBlock x:Name="MonitoredTitle" Style="{StaticResource SectionTitle}" Text="Monitored Directories"/>
+                            </StackPanel>
+                            <Button Content="+ Add Folder" Style="{StaticResource GlassButton}" 
+                                    HorizontalAlignment="Right"
+                                    Click="AddFolderButton_Click"/>
+                        </Grid>
+
+                        <ItemsControl x:Name="MonitoredPathsList">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Spacing="8"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="12,10" Background="#12ffffff" CornerRadius="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Ellipse Grid.Column="0" Width="8" Height="8" 
+                                                 Fill="{StaticResource PurpleBrush}" Margin="0,0,12,0"
+                                                 VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding}" 
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                                   FontSize="13"/>
+                                        <Button Grid.Column="2" Style="{StaticResource GlassButton}"
+                                                Padding="8,4" MinWidth="32" MinHeight="28"
+                                                Click="RemovePath_Click" Tag="{Binding}"
+                                                ToolTipService.ToolTip="Remove this folder">
+                                            <FontIcon Glyph="&#xE711;" FontSize="12"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock x:Name="EmptyMonitoredText" 
+                                   Text="No monitored directories. Add folders to enable real-time scanning."
+                                   Foreground="{StaticResource TextTertiaryBrush}" FontSize="12"
+                                   Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,8"/>
+
+                        <TextBlock x:Name="MonitoredHint" Text="Files in these directories are scanned in real-time when modified"
+                                   Foreground="{StaticResource TextTertiaryBrush}" FontSize="11" FontStyle="Italic"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- LIVE ACTIVITY FEED - Animated Element 7 -->
+                <Border x:Name="AnimActivity" Style="{StaticResource GlassPanel}" MinHeight="200">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#1815151f" Offset="0"/>
+                            <GradientStop Color="#08ffffff" Offset="0.3"/>
+                            <GradientStop Color="#1812121a" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <FontIcon Glyph="&#xE8FD;" FontSize="18" Foreground="{StaticResource CyanBrush}"/>
+                                <TextBlock x:Name="ActivityTitle" Style="{StaticResource SectionTitle}" Text="Live Activity Feed"/>
+                            </StackPanel>
+                            <Button Content="Clear" Style="{StaticResource GlassButton}" 
+                                    HorizontalAlignment="Right" Padding="10,6"
+                                    Click="ClearLog_Click"/>
+                        </Grid>
+
+                        <ListView x:Name="ActivityLogList" Grid.Row="1" 
+                                  Background="Transparent" 
+                                  SelectionMode="None"
+                                  MaxHeight="300"
+                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="MinHeight" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                                            CornerRadius="6" Padding="12,8" Margin="0,2">
+                                        <Grid ColumnSpacing="12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <TextBlock Grid.Column="0" Text="{Binding TimeString}" 
+                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" 
+                                                       FontSize="11" VerticalAlignment="Center"/>
+                                            
+                                            <TextBlock Grid.Column="1" Text="{Binding TypeString}" 
+                                                       FontSize="11" FontWeight="SemiBold"
+                                                       Foreground="{Binding TypeColor}" VerticalAlignment="Center"/>
+                                            
+                                            <TextBlock Grid.Column="2" Text="{Binding Message}" 
+                                                       Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="12"
+                                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Border>
+                <!-- Drop Overlay -->
+                <Border x:Name="DropOverlay" Visibility="Collapsed" 
+                        Background="#80000000" CornerRadius="16">
+                    <Border Background="#20ffffff" CornerRadius="16" Margin="40"
+                            BorderBrush="{StaticResource CyanBrush}" BorderThickness="3"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Padding="60,40">
+                        <StackPanel Spacing="16" HorizontalAlignment="Center">
+                            <FontIcon Glyph="&#xE896;" FontSize="48" Foreground="{StaticResource CyanBrush}"/>
+                            <TextBlock Text="Drop files or folders to scan" 
+                                       FontSize="20" FontWeight="SemiBold" 
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Files will be scanned immediately for threats"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
+

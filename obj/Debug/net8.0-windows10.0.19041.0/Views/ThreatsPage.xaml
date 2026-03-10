@@ -1,0 +1,179 @@
+﻿<Page x:ConnectionId='1'
+    x:Class="AfterlifeWinUI.Views.ThreatsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="Transparent"
+                        
+                            >
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- PAGE HEADER - Animated Element 0 -->
+        <StackPanel x:ConnectionId='2' x:Name="AnimHeader" Grid.Row="0" Margin="0,16,0,16">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <FontIcon Glyph="&#xE7BA;" FontSize="28" Foreground="{StaticResource RedBrush}"/>
+                <TextBlock Style="{StaticResource TitleText}" Text="Detected Threats" Foreground="{StaticResource RedBrush}"/>
+            </StackPanel>
+            <TextBlock x:ConnectionId='22' x:Name="PageSubtitle" Style="{StaticResource SubtitleText}" Text="Manage detected threats - quarantine, delete, or ignore" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- STATS BAR - Animated Element 1 -->
+        <Border x:ConnectionId='3' x:Name="AnimStats" Grid.Row="1" Margin="0,0,0,20" Style="{StaticResource GlassPanel}">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#1815151f" Offset="0"/>
+                    <GradientStop Color="#08ffffff" Offset="0.3"/>
+                    <GradientStop Color="#1812121a" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock x:ConnectionId='20' x:Name="TotalCount" Text="0" FontSize="24" FontWeight="Bold" 
+                               Foreground="{StaticResource CyanBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:ConnectionId='21' x:Name="TotalLabel" Text="Total" Foreground="{StaticResource TextSecondaryBrush}" 
+                               HorizontalAlignment="Center" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock x:ConnectionId='18' x:Name="ActiveCount" Text="0" FontSize="24" FontWeight="Bold" 
+                               Foreground="{StaticResource RedBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:ConnectionId='19' x:Name="ActiveLabel" Text="Active" Foreground="{StaticResource TextSecondaryBrush}" 
+                               HorizontalAlignment="Center" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock x:ConnectionId='16' x:Name="QuarantinedCount" Text="0" FontSize="24" FontWeight="Bold" 
+                               Foreground="{StaticResource OrangeBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:ConnectionId='17' x:Name="QuarantinedLabel" Text="Quarantined" Foreground="{StaticResource TextSecondaryBrush}" 
+                               HorizontalAlignment="Center" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                    <TextBlock x:ConnectionId='14' x:Name="DeletedCount" Text="0" FontSize="24" FontWeight="Bold" 
+                               Foreground="{StaticResource GreenBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:ConnectionId='15' x:Name="DeletedLabel" Text="Deleted" Foreground="{StaticResource TextSecondaryBrush}" 
+                               HorizontalAlignment="Center" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="8">
+                    <Button x:ConnectionId='12' x:Name="QuarantineAllButton" Content="Quarantine All" Style="{StaticResource GlassButton}"
+                                                       />
+                    <Button x:ConnectionId='13' x:Name="ClearResolvedButton" Content="Clear Resolved" Style="{StaticResource GlassButton}"
+                                                       />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- THREATS LIST - Animated Element 2 -->
+        <Border x:ConnectionId='4' x:Name="AnimContent" Grid.Row="2" Style="{StaticResource GlassPanel}">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#1815151f" Offset="0"/>
+                    <GradientStop Color="#08ffffff" Offset="0.3"/>
+                    <GradientStop Color="#1812121a" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <!-- Empty State -->
+                <StackPanel x:ConnectionId='5' x:Name="EmptyState" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <FontIcon Glyph="&#xE8E1;" FontSize="64" 
+                              Foreground="{StaticResource GreenBrush}"
+                              HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="No threats detected" FontSize="20" FontWeight="SemiBold"
+                               Foreground="{StaticResource GreenBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:ConnectionId='11' x:Name="EmptyStateSubtitle" Text="Your system appears to be clean" 
+                               Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <!-- Threats ListView -->
+                <ListView x:ConnectionId='6' x:Name="ThreatsList" 
+                          Background="Transparent" 
+                          SelectionMode="None"
+                          Visibility="Collapsed">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0,0,0,8"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#12ffffff" CornerRadius="8" Padding="16">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                                        <FontIcon Glyph="&#xE7BA;" FontSize="16" 
+                                                  Foreground="{StaticResource RedBrush}"
+                                                  Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding ThreatName}" FontSize="16" FontWeight="SemiBold" 
+                                                   Foreground="White" VerticalAlignment="Center"/>
+                                        <Border Background="#30ff2a6d" CornerRadius="4" Padding="8,2" Margin="12,0,0,0">
+                                            <TextBlock Text="{Binding ActionString}" FontSize="10" FontWeight="Bold"
+                                                       Foreground="{StaticResource RedBrush}"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                        <Button x:ConnectionId='8' Content="Quarantine" Padding="8,4" Style="{StaticResource GlassButton}"
+                                                Tag="{Binding Id}"                         />
+                                        <Button x:ConnectionId='9' Content="Delete" Padding="8,4" Style="{StaticResource DangerButton}"
+                                                Tag="{Binding Id}"                     />
+                                        <Button x:ConnectionId='10' Content="Ignore" Padding="8,4" Style="{StaticResource GlassButton}"
+                                                Tag="{Binding Id}"                     />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                                                Orientation="Horizontal" Margin="24,6,0,0">
+                                        <TextBlock Text="{Binding FileName}" Foreground="White" FontWeight="SemiBold"/>
+                                        <TextBlock Text=" - " Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBlock Text="{Binding FilePath}" Foreground="{StaticResource CyanBrush}" 
+                                                   TextTrimming="CharacterEllipsis" MaxWidth="600"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+                                                Orientation="Horizontal" Margin="24,4,0,0">
+                                        <TextBlock Text="Detected: " Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding DetectedAtString}" Foreground="{StaticResource TextPrimaryBrush}" 
+                                                   FontSize="11"/>
+                                        <TextBlock Text=" | By: " Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding DetectedBy}" Foreground="{StaticResource PurpleBrush}" 
+                                                   FontSize="11" FontWeight="SemiBold"/>
+                                        <TextBlock Text=" | Confidence: " Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding ConfidenceString}" Foreground="{StaticResource GreenBrush}" 
+                                                   FontSize="11" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
+

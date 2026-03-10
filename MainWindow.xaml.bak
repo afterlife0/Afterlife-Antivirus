@@ -1,0 +1,246 @@
+<Window
+    x:Class="AfterlifeWinUI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AfterlifeWinUI"
+    Title="AFTERLiFE">
+
+    <!-- Main Container with Deep Charcoal Background -->
+    <Grid x:Name="RootGrid" Background="{StaticResource BackgroundBrush}">
+        
+        <!-- Background Gradient Orbs for Premium Look -->
+        <Canvas x:Name="BackgroundCanvas" IsHitTestVisible="False">
+            <!-- Orange/Yellow Gradient Orb - Left -->
+            <Ellipse Width="500" Height="500" Canvas.Left="-150" Canvas.Top="-100">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#40ff8c00" Offset="0"/>
+                        <GradientStop Color="#20ff6600" Offset="0.4"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <!-- Cyan/Blue Gradient Orb - Right -->
+            <Ellipse Width="600" Height="600" Canvas.Left="600" Canvas.Top="200">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#3000d4ff" Offset="0"/>
+                        <GradientStop Color="#1500a8cc" Offset="0.4"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <!-- Purple Orb - Bottom Right -->
+            <Ellipse Width="400" Height="400" Canvas.Left="800" Canvas.Top="400">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#20b026ff" Offset="0"/>
+                        <GradientStop Color="#108015cc" Offset="0.5"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Canvas>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="SidebarColumn" Width="260"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- FROSTED GLASS SIDEBAR -->
+            <Border x:Name="SidebarBorder" 
+                    Grid.Column="0" 
+                    Margin="16,16,0,16"
+                    CornerRadius="20"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource GlassBorderBrush}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#3018182a" Offset="0"/>
+                        <GradientStop Color="#2512121a" Offset="0.5"/>
+                        <GradientStop Color="#3018182a" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Title / Brand Header -->
+                    <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="20,24,20,16">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="AFTER" FontSize="26" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="LiFE" FontSize="26" FontWeight="Bold" Foreground="{StaticResource CyanBrush}"/>
+                        </StackPanel>
+                        <TextBlock Text="v2.0 Native Engine" FontSize="11" 
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <!-- Quick Stats Panel -->
+                    <Border Grid.Row="1" Margin="12,0,12,16" Padding="12" 
+                            Background="#15ffffff" CornerRadius="12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <TextBlock x:Name="ScannedCount" Text="13" 
+                                           FontSize="22" FontWeight="Bold" Foreground="{StaticResource CyanBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Scanned" FontSize="10" 
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <TextBlock x:Name="ThreatCount" Text="1" 
+                                           FontSize="22" FontWeight="Bold" Foreground="{StaticResource RedBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Threats" FontSize="10" 
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Menu Label -->
+                    <TextBlock Grid.Row="2" Text="MENU" FontSize="10" FontWeight="SemiBold" 
+                               Foreground="{StaticResource TextTertiaryBrush}" 
+                               Margin="20,8,20,8"/>
+
+                    <!-- Navigation Buttons -->
+                    <StackPanel Grid.Row="3" Margin="8,0">
+                        <Button x:Name="NavDashboard" Click="NavDashboard_Click" 
+                                Style="{StaticResource NavButton}" Tag="Active">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE80F;" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Dashboard"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="NavThreats" Click="NavThreats_Click" Style="{StaticResource NavButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE7BA;" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Threats"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="NavActivity" Click="NavActivity_Click" Style="{StaticResource NavButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE8FD;" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Activity Log"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="NavSystemStatus" Click="NavSystemStatus_Click" Style="{StaticResource NavButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE9F5;" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="System Status"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="NavSettings" Click="NavSettings_Click" Style="{StaticResource NavButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE713;" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Settings"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Status Footer Panel -->
+                    <Border Grid.Row="4" Margin="12,8,12,16" Padding="14" 
+                            Background="#15ffffff" CornerRadius="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Margin="0,0,10,0" 
+                                         Fill="{StaticResource GreenBrush}"/>
+                                <TextBlock x:Name="StatusText" Text="PROTECTED" 
+                                           FontWeight="Bold" FontSize="13" Foreground="{StaticResource GreenBrush}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="Signatures: " FontSize="11" 
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="SigCount" Text="48,713,697" 
+                                           FontSize="11" Foreground="{StaticResource CyanBrush}" FontWeight="SemiBold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock Text="YARA Rules: " FontSize="11" 
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="YaraCount" Text="91,984" 
+                                           FontSize="11" Foreground="{StaticResource CyanBrush}" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Sidebar Toggle Button -->
+            <Button Grid.Column="0" 
+                    Click="ToggleSidebar_Click"
+                    Width="24" Height="48"
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Margin="0,0,-12,0"
+                    CornerRadius="0,8,8,0"
+                    Background="#30ffffff"
+                    BorderThickness="0">
+                <FontIcon x:Name="ToggleIcon" Glyph="&#xE76B;" FontSize="12"/>
+            </Button>
+
+            <!-- MAIN CONTENT AREA -->
+            <Grid Grid.Column="1" Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Title Bar with Window Controls -->
+                <Grid Grid.Row="0" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- AI Engine Status -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="8" Height="8" Margin="0,0,8,0" Fill="{StaticResource GreenBrush}"/>
+                        <TextBlock Text="AI Engine: " FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBlock Text="Online" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource GreenBrush}"/>
+                    </StackPanel>
+
+                    <!-- Window Control Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Click="Minimize_Click" Style="{StaticResource IconButton}">
+                            <FontIcon Glyph="&#xE921;" FontSize="12"/>
+                        </Button>
+                        <Button Click="Maximize_Click" Style="{StaticResource IconButton}">
+                            <FontIcon Glyph="&#xE922;" FontSize="12"/>
+                        </Button>
+                        <Button Click="Close_Click" Style="{StaticResource IconButton}">
+                            <FontIcon Glyph="&#xE8BB;" FontSize="12" Foreground="{StaticResource RedBrush}"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Content Frame -->
+                <Frame x:Name="ContentFrame" Grid.Row="1"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
+
